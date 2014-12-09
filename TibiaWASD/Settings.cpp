@@ -1,24 +1,14 @@
 #include <Windows.h>
-#include <cstdio>
+#include <algorithm>
 #include "Settings.h"
 #include "Console.h"
 #include "TibiaWASD.h"
 
-Settings::Settings(const FileVersion &fileVersion, const char *path) {
-	memset(this, 0, sizeof(*this));
+void Settings::Init(const FileVersion &fileVersion, const char *path) {
 	CurrentVI.FileVersion = fileVersion;
-
-	const char *file = "TibiaWASD.dat";
-	int len = strlen(path) + strlen(file);
-	m_pFile = new char[len + 1];
-	sprintf(m_pFile, "%s%s", path, file);
-
+	m_file = std::string(path) + std::string("TibiaWASD.dat");
 	LoadDefault();
-}
-
-
-Settings::~Settings(void) {
-	delete[] m_pFile;
+	m_initialized = true;
 }
 
 void Settings::LoadDefault() {
@@ -51,10 +41,10 @@ void Settings::LoadDefault() {
 	Config.Keys.Cancel = VK_ESCAPE;
 }
 
-int Settings::Load() {
-	m_version.Clear();
+void Settings::Load() {
+	m_versions.clear();
 	HANDLE hFile;
-	hFile = CreateFile(m_pFile, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	hFile = CreateFile(m_file.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if(hFile != INVALID_HANDLE_VALUE) {
 		bool currentVersion = false;
 		WORD count = 0;
@@ -64,7 +54,7 @@ int Settings::Load() {
 		for(int i = 0; i < count; i++) {
 			VersionInfo vi;
 			ReadFile(hFile, &vi, sizeof(vi), &read, 0);
-			m_version.Add(vi);
+			m_versions.push_back(vi);
 			if(vi.FileVersion == CurrentVI.FileVersion) {
 				CurrentVI.ActionState = vi.ActionState;
 				CurrentVI.ConnectionStatus = vi.ConnectionStatus;
@@ -74,44 +64,43 @@ int Settings::Load() {
 		CloseHandle(hFile);
 
 		if(!currentVersion) {
-			m_version.Add(CurrentVI);
+			m_versions.push_back(CurrentVI);
 		}
 	} else {
 		DWORD error = GetLastError();
 		if(error == ERROR_FILE_NOT_FOUND) {
-			return Save();
+			Save();
+			return;
 		}
 		DisplayError(error);
 	}
-	return 0;
 }
 
-int Settings::Save() {
+void Settings::Save() {
 	UpdateVersion();
 	HANDLE hFile;
-	hFile = CreateFile(m_pFile, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	hFile = CreateFile(m_file.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if(hFile != INVALID_HANDLE_VALUE) {
-		WORD count = (WORD)m_version.Count();
+		WORD count = (WORD)m_versions.size();
 		DWORD written = 0;
 		WriteFile(hFile, &Config, sizeof(Config), &written, 0);
 		WriteFile(hFile, &count, 2, &written, 0);
 
-		for(List<VersionInfo>::Node *it = m_version.Begin(); it != 0; it = it->Next) {
-			WriteFile(hFile, &it->Data, sizeof(VersionInfo), &written, 0);
+		for(const auto& version : m_versions) {
+			WriteFile(hFile, &version, sizeof(VersionInfo), &written, 0);
 		}
 		CloseHandle(hFile);
 	} else {
 		DisplayError(GetLastError());
 	}
-	return 0;
 }
 
 void Settings::UpdateVersion() {
-	VersionInfo *vi = m_version.Find(CurrentVI);
-	if(vi) {
+	auto vi = std::find(m_versions.begin(), m_versions.end(), CurrentVI);
+	if(vi != m_versions.end()) {
 		vi->ConnectionStatus = CurrentVI.ConnectionStatus;
 		vi->ActionState = CurrentVI.ActionState;
 		return;
 	}
-	m_version.Add(CurrentVI);
+	m_versions.push_back(CurrentVI);
 }

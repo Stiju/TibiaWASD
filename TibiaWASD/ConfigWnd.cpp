@@ -7,7 +7,7 @@
 #include "Settings.h"
 #include "TibiaWASD.h"
 #include "Updater.h"
-#include "resource.h"
+//#include "resource.h"
 
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
@@ -60,7 +60,7 @@ enum {
 
 inline void SetControlKey(HWND hWnd, unsigned short key) {
 	char buf[4];
-	sprintf(buf, "%.2X", key);
+	sprintf_s(buf, "%.2X", key);
 	SetWindowText(hWnd, buf);
 }
 
@@ -72,7 +72,7 @@ inline unsigned short GetControlKey(HWND hWnd) {
 
 inline void SetControlAddr(HWND hWnd, unsigned int addr) {
 	char buf[12];
-	sprintf(buf, "%.8X", addr);
+	sprintf_s(buf, "%.8X", addr);
 	SetWindowText(hWnd, buf);
 }
 
@@ -93,77 +93,77 @@ inline bool IsChecked(int nIDButton) {
 }
 
 void ResetFields() {
-	SetControlKey(g_hEditControls[HWND_NORTHWEST], settings->Config.Keys.NorthWest);
-	SetControlKey(g_hEditControls[HWND_NORTH], settings->Config.Keys.North);
-	SetControlKey(g_hEditControls[HWND_NORTHEAST], settings->Config.Keys.NorthEast);
-	SetControlKey(g_hEditControls[HWND_WEST], settings->Config.Keys.West);
-	SetControlKey(g_hEditControls[HWND_EAST], settings->Config.Keys.East);
-	SetControlKey(g_hEditControls[HWND_SOUTHWEST], settings->Config.Keys.SouthWest);
-	SetControlKey(g_hEditControls[HWND_SOUTH], settings->Config.Keys.South);
-	SetControlKey(g_hEditControls[HWND_SOUTHEAST], settings->Config.Keys.SouthEast);
+	SetControlKey(g_hEditControls[HWND_NORTHWEST], settings.Config.Keys.NorthWest);
+	SetControlKey(g_hEditControls[HWND_NORTH], settings.Config.Keys.North);
+	SetControlKey(g_hEditControls[HWND_NORTHEAST], settings.Config.Keys.NorthEast);
+	SetControlKey(g_hEditControls[HWND_WEST], settings.Config.Keys.West);
+	SetControlKey(g_hEditControls[HWND_EAST], settings.Config.Keys.East);
+	SetControlKey(g_hEditControls[HWND_SOUTHWEST], settings.Config.Keys.SouthWest);
+	SetControlKey(g_hEditControls[HWND_SOUTH], settings.Config.Keys.South);
+	SetControlKey(g_hEditControls[HWND_SOUTHEAST], settings.Config.Keys.SouthEast);
 
-	SetControlKey(g_hEditControls[HWND_F1], settings->Config.Keys.F1);
-	SetControlKey(g_hEditControls[HWND_F2], settings->Config.Keys.F2);
-	SetControlKey(g_hEditControls[HWND_F3], settings->Config.Keys.F3);
-	SetControlKey(g_hEditControls[HWND_F4], settings->Config.Keys.F4);
-	SetControlKey(g_hEditControls[HWND_F5], settings->Config.Keys.F5);
-	SetControlKey(g_hEditControls[HWND_F6], settings->Config.Keys.F6);
-	SetControlKey(g_hEditControls[HWND_F7], settings->Config.Keys.F7);
-	SetControlKey(g_hEditControls[HWND_F8], settings->Config.Keys.F8);
-	SetControlKey(g_hEditControls[HWND_F9], settings->Config.Keys.F9);
-	SetControlKey(g_hEditControls[HWND_F10], settings->Config.Keys.F10);
-	SetControlKey(g_hEditControls[HWND_F11], settings->Config.Keys.F11);
-	SetControlKey(g_hEditControls[HWND_F12], settings->Config.Keys.F12);
+	SetControlKey(g_hEditControls[HWND_F1], settings.Config.Keys.F1);
+	SetControlKey(g_hEditControls[HWND_F2], settings.Config.Keys.F2);
+	SetControlKey(g_hEditControls[HWND_F3], settings.Config.Keys.F3);
+	SetControlKey(g_hEditControls[HWND_F4], settings.Config.Keys.F4);
+	SetControlKey(g_hEditControls[HWND_F5], settings.Config.Keys.F5);
+	SetControlKey(g_hEditControls[HWND_F6], settings.Config.Keys.F6);
+	SetControlKey(g_hEditControls[HWND_F7], settings.Config.Keys.F7);
+	SetControlKey(g_hEditControls[HWND_F8], settings.Config.Keys.F8);
+	SetControlKey(g_hEditControls[HWND_F9], settings.Config.Keys.F9);
+	SetControlKey(g_hEditControls[HWND_F10], settings.Config.Keys.F10);
+	SetControlKey(g_hEditControls[HWND_F11], settings.Config.Keys.F11);
+	SetControlKey(g_hEditControls[HWND_F12], settings.Config.Keys.F12);
 
-	SetControlKey(g_hEditControls[HWND_MMB], settings->Config.Keys.MMouseButton);
-	SetControlKey(g_hEditControls[HWND_XMB1], settings->Config.Keys.XMouseButton1);
-	SetControlKey(g_hEditControls[HWND_XMB2], settings->Config.Keys.XMouseButton2);
+	SetControlKey(g_hEditControls[HWND_MMB], settings.Config.Keys.MMouseButton);
+	SetControlKey(g_hEditControls[HWND_XMB1], settings.Config.Keys.XMouseButton1);
+	SetControlKey(g_hEditControls[HWND_XMB2], settings.Config.Keys.XMouseButton2);
 
-	SetControlKey(g_hEditControls[HWND_WRITEMODE], settings->Config.Keys.WriteMode);
-	SetControlKey(g_hEditControls[HWND_CANCEL], settings->Config.Keys.Cancel);
+	SetControlKey(g_hEditControls[HWND_WRITEMODE], settings.Config.Keys.WriteMode);
+	SetControlKey(g_hEditControls[HWND_CANCEL], settings.Config.Keys.Cancel);
 
-	SetCheckBox(CID_TITLE, settings->Config.IsWasdTitle);
-	SetCheckBox(CID_VERSION, settings->Config.IsVersionIndependent);
+	SetCheckBox(CID_TITLE, settings.Config.IsWasdTitle);
+	SetCheckBox(CID_VERSION, settings.Config.IsVersionIndependent);
 
-	SetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS], settings->CurrentVI.ConnectionStatus);
-	SetControlAddr(g_hEditControls[HWND_ACTIONSTATE], settings->CurrentVI.ActionState);
+	SetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS], settings.CurrentVI.ConnectionStatus);
+	SetControlAddr(g_hEditControls[HWND_ACTIONSTATE], settings.CurrentVI.ActionState);
 }
 
 void ApplySettings() {
-	settings->Config.Keys.NorthWest = GetControlKey(g_hEditControls[HWND_NORTHWEST]);
-	settings->Config.Keys.North = GetControlKey(g_hEditControls[HWND_NORTH]);
-	settings->Config.Keys.NorthEast = GetControlKey(g_hEditControls[HWND_NORTHEAST]);
-	settings->Config.Keys.West = GetControlKey(g_hEditControls[HWND_WEST]);
-	settings->Config.Keys.East = GetControlKey(g_hEditControls[HWND_EAST]);
-	settings->Config.Keys.SouthWest = GetControlKey(g_hEditControls[HWND_SOUTHWEST]);
-	settings->Config.Keys.South = GetControlKey(g_hEditControls[HWND_SOUTH]);
-	settings->Config.Keys.SouthEast = GetControlKey(g_hEditControls[HWND_SOUTHEAST]);
+	settings.Config.Keys.NorthWest = GetControlKey(g_hEditControls[HWND_NORTHWEST]);
+	settings.Config.Keys.North = GetControlKey(g_hEditControls[HWND_NORTH]);
+	settings.Config.Keys.NorthEast = GetControlKey(g_hEditControls[HWND_NORTHEAST]);
+	settings.Config.Keys.West = GetControlKey(g_hEditControls[HWND_WEST]);
+	settings.Config.Keys.East = GetControlKey(g_hEditControls[HWND_EAST]);
+	settings.Config.Keys.SouthWest = GetControlKey(g_hEditControls[HWND_SOUTHWEST]);
+	settings.Config.Keys.South = GetControlKey(g_hEditControls[HWND_SOUTH]);
+	settings.Config.Keys.SouthEast = GetControlKey(g_hEditControls[HWND_SOUTHEAST]);
 
-	settings->Config.Keys.F1 = GetControlKey(g_hEditControls[HWND_F1]);
-	settings->Config.Keys.F2 = GetControlKey(g_hEditControls[HWND_F2]);
-	settings->Config.Keys.F3 = GetControlKey(g_hEditControls[HWND_F3]);
-	settings->Config.Keys.F4 = GetControlKey(g_hEditControls[HWND_F4]);
-	settings->Config.Keys.F5 = GetControlKey(g_hEditControls[HWND_F5]);
-	settings->Config.Keys.F6 = GetControlKey(g_hEditControls[HWND_F6]);
-	settings->Config.Keys.F7 = GetControlKey(g_hEditControls[HWND_F7]);
-	settings->Config.Keys.F8 = GetControlKey(g_hEditControls[HWND_F8]);
-	settings->Config.Keys.F9 = GetControlKey(g_hEditControls[HWND_F9]);
-	settings->Config.Keys.F10 = GetControlKey(g_hEditControls[HWND_F10]);
-	settings->Config.Keys.F11 = GetControlKey(g_hEditControls[HWND_F11]);
-	settings->Config.Keys.F12 = GetControlKey(g_hEditControls[HWND_F12]);
+	settings.Config.Keys.F1 = GetControlKey(g_hEditControls[HWND_F1]);
+	settings.Config.Keys.F2 = GetControlKey(g_hEditControls[HWND_F2]);
+	settings.Config.Keys.F3 = GetControlKey(g_hEditControls[HWND_F3]);
+	settings.Config.Keys.F4 = GetControlKey(g_hEditControls[HWND_F4]);
+	settings.Config.Keys.F5 = GetControlKey(g_hEditControls[HWND_F5]);
+	settings.Config.Keys.F6 = GetControlKey(g_hEditControls[HWND_F6]);
+	settings.Config.Keys.F7 = GetControlKey(g_hEditControls[HWND_F7]);
+	settings.Config.Keys.F8 = GetControlKey(g_hEditControls[HWND_F8]);
+	settings.Config.Keys.F9 = GetControlKey(g_hEditControls[HWND_F9]);
+	settings.Config.Keys.F10 = GetControlKey(g_hEditControls[HWND_F10]);
+	settings.Config.Keys.F11 = GetControlKey(g_hEditControls[HWND_F11]);
+	settings.Config.Keys.F12 = GetControlKey(g_hEditControls[HWND_F12]);
 
-	settings->Config.Keys.MMouseButton = GetControlKey(g_hEditControls[HWND_MMB]);
-	settings->Config.Keys.XMouseButton1 = GetControlKey(g_hEditControls[HWND_XMB1]);
-	settings->Config.Keys.XMouseButton2 = GetControlKey(g_hEditControls[HWND_XMB2]);
+	settings.Config.Keys.MMouseButton = GetControlKey(g_hEditControls[HWND_MMB]);
+	settings.Config.Keys.XMouseButton1 = GetControlKey(g_hEditControls[HWND_XMB1]);
+	settings.Config.Keys.XMouseButton2 = GetControlKey(g_hEditControls[HWND_XMB2]);
 
-	settings->Config.Keys.WriteMode = GetControlKey(g_hEditControls[HWND_WRITEMODE]);
-	settings->Config.Keys.Cancel = GetControlKey(g_hEditControls[HWND_CANCEL]);
+	settings.Config.Keys.WriteMode = GetControlKey(g_hEditControls[HWND_WRITEMODE]);
+	settings.Config.Keys.Cancel = GetControlKey(g_hEditControls[HWND_CANCEL]);
 
-	settings->Config.IsWasdTitle = IsChecked(CID_TITLE);
-	settings->Config.IsVersionIndependent = IsChecked(CID_VERSION);
+	settings.Config.IsWasdTitle = IsChecked(CID_TITLE);
+	settings.Config.IsVersionIndependent = IsChecked(CID_VERSION);
 
-	settings->CurrentVI.ConnectionStatus = GetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS]);
-	settings->CurrentVI.ActionState = GetControlAddr(g_hEditControls[HWND_ACTIONSTATE]);
+	settings.CurrentVI.ConnectionStatus = GetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS]);
+	settings.CurrentVI.ActionState = GetControlAddr(g_hEditControls[HWND_ACTIONSTATE]);
 }
 
 void InitTrayIcon(HICON hIcon) {
@@ -175,8 +175,8 @@ void InitTrayIcon(HICON hIcon) {
 	niData.uCallbackMessage = WM_USER;
 	niData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	niData.uID = WM_USER;
-	strcpy(niData.szTip, tibiaWasd);
-	strcat(niData.szTip, " by Stiju.com");
+	strcpy_s(niData.szTip, tibiaWasd);
+	strcat_s(niData.szTip, " by Stiju.com");
 	Shell_NotifyIcon(NIM_ADD, &niData);
 }
 
@@ -197,34 +197,34 @@ LRESULT CALLBACK ConfigWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			case CID_SAVE:
 				{
 					ApplySettings();
-					settings->Save();
+					settings.Save();
 					UpdateTitle();
 					break;
 				}
 			case CID_LOAD:
 				{
-					settings->Load();
+					settings.Load();
 					ResetFields();
 					UpdateTitle();
 					break;
 				}
 			case CID_DEFAULT:
 				{
-					settings->LoadDefault();
+					settings.LoadDefault();
 					ResetFields();
 					UpdateTitle();
-					settings->Load();
+					settings.Load();
 					break;
 				}
 			case CID_TITLE:
 				{
-					settings->Config.IsWasdTitle = IsChecked(CID_TITLE);
+					settings.Config.IsWasdTitle = IsChecked(CID_TITLE);
 					UpdateTitle();
 					break;
 				}
 			case CID_VERSION:
 				{
-					settings->Config.IsVersionIndependent = IsChecked(CID_VERSION);
+					settings.Config.IsVersionIndependent = IsChecked(CID_VERSION);
 					break;
 				}
 			case CID_UPDATE:
@@ -236,12 +236,12 @@ LRESULT CALLBACK ConfigWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 						Updater u(g_hConfigWnd);
 						addr = u.GetConnectionStatus();
 						if(addr != 0) {
-							settings->CurrentVI.ConnectionStatus = addr;
+							settings.CurrentVI.ConnectionStatus = addr;
 							SetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS], addr);
 						}
 						addr = u.GetActionState();
 						if(addr != 0) {
-							settings->CurrentVI.ActionState = addr;
+							settings.CurrentVI.ActionState = addr;
 							SetControlAddr(g_hEditControls[HWND_ACTIONSTATE], addr);
 						}
 						isDisabled = false;
@@ -362,7 +362,7 @@ void InitConfigControls(HWND hWnd, HINSTANCE hInstance) {
 	}
 	for(int i = 0; i < 12; i++) {
 		char buf[4];
-		sprintf(buf, "F%d", i + 1);
+		sprintf_s(buf, "F%d", i + 1);
 		createStatic(buf, 10 + (24 * i), 10, 20, 20);
 		g_hEditControls[HWND_F1 + i] = createEditEx(10 + (24 * i), 30, 18, 18);
 	}

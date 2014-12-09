@@ -1,9 +1,11 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "List.h"
+#include <vector>
+#include <string>
 
 struct FileVersion {
+	FileVersion() : Version{0} {}
 	union {
 		struct {
 			unsigned int VersionLo;
@@ -18,6 +20,7 @@ struct FileVersion {
 };
 
 struct VersionInfo {
+	VersionInfo() : ConnectionStatus{0}, ActionState{0} {}
 	FileVersion FileVersion;
 	unsigned int ConnectionStatus;
 	unsigned int ActionState;
@@ -29,12 +32,13 @@ struct VersionInfo {
 
 class Settings {
 public:
-	Settings(const FileVersion &fileVersion, const char *path);
-	~Settings(void);
+	Settings() : m_initialized{false} {};
 
+	void Init(const FileVersion &fileVersion, const char *path);
 	void LoadDefault();
-	int Load();
-	int Save();
+	void Load();
+	void Save();
+	bool IsInitialized() const { return m_initialized; }
 
 	VersionInfo CurrentVI;
 
@@ -62,9 +66,9 @@ public:
 	}Config;
 
 private:
-	List<VersionInfo> m_version;
-	char *m_pFile;
-
+	bool m_initialized;
+	std::vector<VersionInfo> m_versions;
+	std::string m_file;
 	void UpdateVersion();
 };
 

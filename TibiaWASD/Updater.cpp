@@ -1,11 +1,7 @@
 #include "Updater.h"
-#include "MemoryScanner.h"
 #include "TibiaWASD.h"
 
-Updater::Updater(HWND hWnd) {
-	m_hWnd = hWnd;
-	m_pMemoryScanner = new MemoryScanner<unsigned int>();
-
+Updater::Updater(HWND hWnd) : m_hWnd{hWnd} {
 	DWORD imageBase = (DWORD)GetModuleHandle(0);
 	PIMAGE_DOS_HEADER pimage_dos_header;
 	PIMAGE_NT_HEADERS pimage_nt_headers;
@@ -14,11 +10,7 @@ Updater::Updater(HWND hWnd) {
 
 	void *start = (void*)(imageBase);
 	void *end = (void*)(imageBase + pimage_nt_headers->OptionalHeader.SizeOfImage);
-	m_pMemoryScanner->SetSearchSpan(start, end);
-}
-
-Updater::~Updater(void) {
-	delete m_pMemoryScanner;
+	m_memoryScanner.SetSearchSpan(start, end);
 }
 
 unsigned int Updater::GetConnectionStatus() {
@@ -41,15 +33,15 @@ unsigned int Updater::Search(const char *msg1, const char *msg2, unsigned int va
 			return 0;
 		if(first) {
 			first ^= 1;
-			m_pMemoryScanner->SearchFirst(val1);
+			m_memoryScanner.SearchFirst(val1);
 		} else
-			m_pMemoryScanner->SearchNext(val1);
+			m_memoryScanner.SearchNext(val1);
 		mbret = MessageBox(m_hWnd, msg2, tibiaWasd, MB_OKCANCEL | MB_ICONINFORMATION);
 		if(mbret == IDCANCEL)
 			return 0;
-		m_pMemoryScanner->SearchNext(val2);
-	} while(m_pMemoryScanner->NumberOfResults() > 1 && repeat-- > 0);
-	if(m_pMemoryScanner->NumberOfResults() == 0)
+		m_memoryScanner.SearchNext(val2);
+	} while(m_memoryScanner.NumberOfResults() > 1 && repeat-- > 0);
+	if(m_memoryScanner.NumberOfResults() == 0)
 		return 0;
-	return ((unsigned int)m_pMemoryScanner->GetFirstResult() - (unsigned int)GetModuleHandle(0));
+	return ((unsigned int)m_memoryScanner.GetFirstResult() - (unsigned int)GetModuleHandle(0));
 }

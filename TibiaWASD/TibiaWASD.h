@@ -5,7 +5,7 @@ void UpdateTitle();
 void DisplayError(DWORD errorcode);
 
 class Settings;
-extern Settings *settings;
+extern Settings settings;
 extern const char *tibiaWasd;
 
 /* kConnectionStatusIsOnline values
