@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TibiaWASD", "TibiaWASD\TibiaWASD.vcxproj", "{9C17F72F-49CF-425C-B995-1B1B51D5D151}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Injector", "Injector\Injector.vcxproj", "{D084F41A-D950-4160-BECD-AFE7DC6D371B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9C17F72F-49CF-425C-B995-1B1B51D5D151} = {9C17F72F-49CF-425C-B995-1B1B51D5D151}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C17F72F-49CF-425C-B995-1B1B51D5D151}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9C17F72F-49CF-425C-B995-1B1B51D5D151}.Debug|Win32.Build.0 = Debug|Win32
+		{9C17F72F-49CF-425C-B995-1B1B51D5D151}.Release|Win32.ActiveCfg = Release|Win32
+		{9C17F72F-49CF-425C-B995-1B1B51D5D151}.Release|Win32.Build.0 = Release|Win32
+		{D084F41A-D950-4160-BECD-AFE7DC6D371B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D084F41A-D950-4160-BECD-AFE7DC6D371B}.Debug|Win32.Build.0 = Debug|Win32
+		{D084F41A-D950-4160-BECD-AFE7DC6D371B}.Release|Win32.ActiveCfg = Release|Win32
+		{D084F41A-D950-4160-BECD-AFE7DC6D371B}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
