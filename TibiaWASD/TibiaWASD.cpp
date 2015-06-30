@@ -141,14 +141,6 @@ LRESULT APIENTRY TibiaProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	static bool isReady = false;
 	static bool isCtrlDown = false;
 	static bool isNonBlock = false;
-	auto isOnline = []()->bool {
-		if(settings.IsInitialized()) {
-			unsigned int *ptr = (unsigned int*)(settings.CurrentVI.ConnectionStatus + baseAddress);
-			if(!IsBadReadPtr(ptr, 4))
-				return *ptr == kConnectionStatusIsOnline;
-		}
-		return true;
-	};
 	auto isModuleWindowOpen = []()->bool {
 		if(settings.IsInitialized()) {
 			unsigned int *ptr = (unsigned int*)(settings.CurrentVI.ActionState + baseAddress);
@@ -184,7 +176,7 @@ LRESULT APIENTRY TibiaProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		DbgLog("WM_CHAR %.8X %.8X\n", wParam, lParam);
 		if(isNonBlock) {
 			isNonBlock = false;
-		} else if(settings.Config.IsVersionIndependent || isOnline() && !isModuleWindowOpen()) {
+		} else if(settings.Config.IsVersionIndependent || !isModuleWindowOpen()) {
 			if(!isBlocking && isActive)
 				return 0;
 			if(isBlocking) {
@@ -205,7 +197,7 @@ LRESULT APIENTRY TibiaProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 				UpdateTitle();
 				break;
 			}
-		} else if(settings.Config.IsVersionIndependent || isActive && isOnline() && !isModuleWindowOpen()) {
+		} else if(settings.Config.IsVersionIndependent || isActive && !isModuleWindowOpen()) {
 			if(IsEqualAndNotZero(settings.Config.Keys.WriteMode, wParam)) {
 				isActive = false;
 				isBlocking = true;

@@ -125,7 +125,6 @@ void ResetFields() {
 	SetCheckBox(CID_TITLE, settings.Config.IsWasdTitle);
 	SetCheckBox(CID_VERSION, settings.Config.IsVersionIndependent);
 
-	SetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS], settings.CurrentVI.ConnectionStatus);
 	SetControlAddr(g_hEditControls[HWND_ACTIONSTATE], settings.CurrentVI.ActionState);
 }
 
@@ -162,7 +161,6 @@ void ApplySettings() {
 	settings.Config.IsWasdTitle = IsChecked(CID_TITLE);
 	settings.Config.IsVersionIndependent = IsChecked(CID_VERSION);
 
-	settings.CurrentVI.ConnectionStatus = GetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS]);
 	settings.CurrentVI.ActionState = GetControlAddr(g_hEditControls[HWND_ACTIONSTATE]);
 }
 
@@ -234,11 +232,6 @@ LRESULT CALLBACK ConfigWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 						isDisabled = true;
 						unsigned int addr;
 						Updater u(g_hConfigWnd);
-						addr = u.GetConnectionStatus();
-						if(addr != 0) {
-							settings.CurrentVI.ConnectionStatus = addr;
-							SetControlAddr(g_hEditControls[HWND_CONNECTIONSTATUS], addr);
-						}
 						addr = u.GetActionState();
 						if(addr != 0) {
 							settings.CurrentVI.ActionState = addr;
@@ -387,10 +380,8 @@ void InitConfigControls(HWND hWnd, HINSTANCE hInstance) {
 	createButton("Default", 306, 66, 60, 20, (HMENU)CID_DEFAULT);
 	createButton("Update", 306, 94, 60, 20, (HMENU)CID_UPDATE);
 
-	createStatic("ConnectionStatus", 202, 60, 100, 20);
-	createStatic("ActionState", 202, 104, 90, 20);
-	g_hEditControls[HWND_CONNECTIONSTATUS] = createEdit(202, 80, 90, 18);
-	g_hEditControls[HWND_ACTIONSTATE] = createEdit(202, 128, 90, 18);
+	createStatic("ActionState", 202, 60, 90, 20);
+	g_hEditControls[HWND_ACTIONSTATE] = createEdit(202, 80, 90, 18);
 
 	createWindow(0, "SysLink", "<a href=\"http://www.stiju.com\">Stiju.com</a>",
 		WS_CHILD | WS_VISIBLE, 320, 160, 60, 20, 0, (HMENU)0, 0, 0);
